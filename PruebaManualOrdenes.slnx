@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Ordenes.Api/Ordenes.Api.csproj" />
+  <Project Path="Ordenes.Infraestructura/Ordenes.Infraestructura.csproj" />
+  <Project Path="Ordenes.Worker/Ordenes.Worker.csproj" />
+  <Project Path="Shared/Shared.csproj" />
+</Solution>
