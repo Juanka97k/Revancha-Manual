@@ -5,6 +5,8 @@ using Pedidos.Api.Features.Pedidos.interfaces;
 using Pedidos.Api.Features.Pedidos.Mappers;
 using Pedidos.Api.Features.Pedidos.Repo;
 using Pedidos.Api.Features.Pedidos.Services;
+using FluentValidation;
+using Pedidos.Api.Features.Pedidos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<PedidosCreateDtoValidator>();
 
 //conexion a la base de datos
 var connectionString = builder.Configuration.GetConnectionString("Postgres");

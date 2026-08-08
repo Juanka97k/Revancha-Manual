@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pedidos.Api.Dtos;
@@ -17,10 +18,13 @@ namespace Pedidos.Api.Features.Pedidos
         private readonly ILogger<PedidosController> _logger;
         private readonly IPedidosServices _pedidosServices;
 
-        public PedidosController(ILogger<PedidosController> logger, IPedidosServices pedidosServices)
+        private readonly IValidator<PedidosCreateDto> _validator;
+
+        public PedidosController(ILogger<PedidosController> logger, IPedidosServices pedidosServices, IValidator<PedidosCreateDto> validator)
         {
             _logger = logger;
             _pedidosServices = pedidosServices;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -44,6 +48,13 @@ namespace Pedidos.Api.Features.Pedidos
         [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CrearPedidos(PedidosCreateDto request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             var result = await _pedidosServices.CrearPedidoAsync(request, cancellationToken);
 
             return CreatedAtAction(nameof(ConsultarPedido), new { id = result.Id }, result);
