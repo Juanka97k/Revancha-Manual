@@ -7,6 +7,7 @@ using Pedidos.Api.Features.Pedidos.Repo;
 using Pedidos.Api.Features.Pedidos.Services;
 using FluentValidation;
 using Pedidos.Api.Features.Pedidos;
+using Pedidos.Api.Features.Sku;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,18 +17,14 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-
-builder.Services.AddValidatorsFromAssemblyContaining<PedidosCreateDtoValidator>();
-
 //conexion a la base de datos
 var connectionString = builder.Configuration.GetConnectionString("Postgres");
 builder.Services.AddDbContext<PedidosDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+PedidosConfigureServices(builder.Services);
+SkuConfigureServices(builder.Services);
 
-builder.Services.AddScoped<IPedidosServices, PedidosServices>();
-builder.Services.AddScoped<IPedidosMapper, PedidosMapper>();
-builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 
 // Add services to the container.
 
@@ -52,3 +49,20 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+static void PedidosConfigureServices(
+    IServiceCollection services)
+{
+    services.AddScoped<IPedidosServices, PedidosServices>();
+    services.AddScoped<IPedidosMapper, PedidosMapper>();
+    services.AddScoped<IPedidosRepository, PedidosRepository>();
+    services.AddValidatorsFromAssemblyContaining<PedidosCreateDtoValidator>();
+}
+
+static void SkuConfigureServices(
+    IServiceCollection services)
+{
+    services.AddScoped<ISkuRepository, SkuRepository>();
+    services.AddScoped<ISkuServices, SkuServices>();
+}
