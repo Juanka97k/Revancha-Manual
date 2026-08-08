@@ -1,6 +1,6 @@
 namespace Worker.RabbitQM;
 
-public class Worker(ILogger<Worker> logger) : BackgroundService
+public class RabbitMqWorker(ILogger<RabbitMqWorker> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

@@ -1,7 +1,7 @@
 using Worker.Pedidos;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddHostedService<PedidosWorker>();
 
 var host = builder.Build();
 host.Run();

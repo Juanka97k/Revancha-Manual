@@ -1,6 +1,6 @@
 namespace Worker.Pedidos;
 
-public class Worker(ILogger<Worker> logger) : BackgroundService
+public class PedidosWorker(ILogger<PedidosWorker> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
