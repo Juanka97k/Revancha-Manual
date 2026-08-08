@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Ordenes.Infraestructura.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //conexion a la base de datos
