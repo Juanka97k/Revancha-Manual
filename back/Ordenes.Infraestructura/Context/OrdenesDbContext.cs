@@ -8,7 +8,7 @@ namespace Ordenes.Infraestructura.Context
 {
     public class OrdenesDbContext : DbContext
     {
-        public OrdenesDbContext(DbContextOptions options) : base(options)
+        public OrdenesDbContext(DbContextOptions<OrdenesDbContext> options) : base(options)
         {
         }
 

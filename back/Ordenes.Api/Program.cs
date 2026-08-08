@@ -5,9 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //conexion a la base de datos
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("Postgres");
 builder.Services.AddDbContext<OrdenesDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionString)));
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
