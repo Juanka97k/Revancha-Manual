@@ -22,8 +22,8 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
             return new Pedido
             {
                 Id = Guid.NewGuid(),
-                NombreCliente = request.ClienteNombre,
-                Sku = request.Sku,
+                NombreCliente = request.ClienteNombre.ToLower(),
+                Sku = request.Sku.ToUpper(),
                 Cantidad = request.Cantidad,
                 Estado = Status.Pendiente,
                 FechaCreacion = DateTime.UtcNow
