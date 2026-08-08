@@ -1,6 +1,7 @@
 <Solution>
-  <Project Path="back/Ordenes.Api/Ordenes.Api.csproj" />
-  <Project Path="back/Ordenes.Infraestructura/Ordenes.Infraestructura.csproj" />
-  <Project Path="back/Ordenes.Worker/Ordenes.Worker.csproj" />
-  <Project Path="back/Shared/Shared.csproj" />
+  <Project Path="BackEnd/Pedidos.Api/Pedidos.Api.csproj" />
+  <Project Path="BackEnd/Pedidos.Infraestructura/Pedidos.Infraestructura.csproj" />
+  <Project Path="BackEnd/Worker.Pedidos/Worker.Pedidos.csproj" />
+  <Project Path="BackEnd/Worker.RabbitQM/Worker.RabbitQM.csproj" />
+  <Project Path="BackEnd/Shared/Shared.csproj" />
 </Solution>

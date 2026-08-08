@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Ordenes.Api.Features.Pedidos
 {
-    [Route("[controller]")]
+    [Route("Pedidos/[controller]")]
     public class PedidosController : Controller
     {
         private readonly ILogger<PedidosController> _logger;
@@ -18,15 +18,20 @@ namespace Ordenes.Api.Features.Pedidos
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public IActionResult ConsultarPedido()
         {
-            return View();
+            return Ok("Soy el get");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
+        public IActionResult ConsultarPedido(int id)
         {
-            return View("Error!");
+            return Ok("Soy el get con id");
         }
+
     }
 }
