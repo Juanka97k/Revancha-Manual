@@ -9,11 +9,16 @@ using Shared.Dtos;
 
 namespace Worker.RabbitQM.Repos
 {
-    public class RabbitRepository
+    public interface IRabbitRepository
     {
-         private readonly PedidosDbContext _context;
+        Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken);
+    }
 
-        public RabbitRepository( PedidosDbContext context)
+    public class RabbitRepository : IRabbitRepository
+    {
+        private readonly PedidosDbContext _context;
+
+        public RabbitRepository(PedidosDbContext context)
         {
             _context = context;
         }
