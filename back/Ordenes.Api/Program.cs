@@ -1,8 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using Ordenes.Infraestructura.Context;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+//conexion a la base de datos
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<OrdenesDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionString)));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+
+builder.Services.AddControllers();
+
+//----------------------------------------------------------
 
 var app = builder.Build();
 
@@ -14,24 +28,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// var summaries = new[]
-// {
-//     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-// };
+app.UseAuthorization();
 
-// app.MapGet("/weatherforecast", () =>
-// {
-//     var forecast =  Enumerable.Range(1, 5).Select(index =>
-//         new WeatherForecast
-//         (
-//             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-//             Random.Shared.Next(-20, 55),
-//             summaries[Random.Shared.Next(summaries.Length)]
-//         ))
-//         .ToArray();
-//     return forecast;
-// })
-// .WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
 
