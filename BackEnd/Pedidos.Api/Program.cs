@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using Ordenes.Infraestructura.Context;
+using Pedidos.Infraestructura.Context;
 using Pedidos.Api.Features.Pedidos.interfaces;
+using Pedidos.Api.Features.Pedidos.Mappers;
+using Pedidos.Api.Features.Pedidos.Repo;
 using Pedidos.Api.Features.Pedidos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,11 +16,13 @@ builder.Services.AddControllers()
 
 //conexion a la base de datos
 var connectionString = builder.Configuration.GetConnectionString("Postgres");
-builder.Services.AddDbContext<OrdenesDbContext>(options =>
+builder.Services.AddDbContext<PedidosDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 
 builder.Services.AddScoped<IPedidosServices, PedidosServices>();
+builder.Services.AddScoped<IPedidosMapper, PedidosMapper>();
+builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 
 // Add services to the container.
 

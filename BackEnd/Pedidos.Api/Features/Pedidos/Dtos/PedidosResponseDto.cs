@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ordenes.Infraestructura.Entities;
+using Pedidos.Infraestructura.Entities;
 
-namespace Pedidos.Api.DTOS
+namespace Pedidos.Api.Dtos
 {
     public record PedidosResponseDto(
         Guid Id,

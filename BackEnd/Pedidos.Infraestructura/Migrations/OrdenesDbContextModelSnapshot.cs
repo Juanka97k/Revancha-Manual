@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Ordenes.Infraestructura.Context;
+using Pedidos.Infraestructura.Context;
 
 #nullable disable
 
 namespace Pedidos.Infraestructura.Migrations
 {
-    [DbContext(typeof(OrdenesDbContext))]
+    [DbContext(typeof(PedidosDbContext))]
     partial class OrdenesDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace Pedidos.Infraestructura.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Ordenes.Infraestructura.Entities.Pedido", b =>
+            modelBuilder.Entity("Pedidos.Infraestructura.Entities.Pedido", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,6 @@ namespace Pedidos.Infraestructura.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NombreCliente")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Sku")
@@ -50,7 +49,21 @@ namespace Pedidos.Infraestructura.Migrations
                     b.ToTable("Pedidos");
                 });
 
-            modelBuilder.Entity("Ordenes.Infraestructura.Entities.PedidoProcesado", b =>
+            modelBuilder.Entity("Pedidos.Infraestructura.Entities.PedidoCola", b =>
+                {
+                    b.Property<Guid>("PedidoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreadoEn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("PedidoId");
+
+                    b.ToTable("PedidoCola");
+                });
+
+            modelBuilder.Entity("Pedidos.Infraestructura.Entities.PedidoProcesado", b =>
                 {
                     b.Property<Guid>("PedidoId")
                         .ValueGeneratedOnAdd()
@@ -64,7 +77,7 @@ namespace Pedidos.Infraestructura.Migrations
                     b.ToTable("PedidosProcesados");
                 });
 
-            modelBuilder.Entity("Ordenes.Infraestructura.Entities.Stock", b =>
+            modelBuilder.Entity("Pedidos.Infraestructura.Entities.Stock", b =>
                 {
                     b.Property<string>("Sku")
                         .ValueGeneratedOnAdd()

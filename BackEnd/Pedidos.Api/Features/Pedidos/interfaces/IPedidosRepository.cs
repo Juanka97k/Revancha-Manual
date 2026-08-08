@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ordenes.Infraestructura.Entities;
+using Pedidos.Infraestructura.Entities;
 
 namespace Pedidos.Api.Features.Pedidos.interfaces
 {
     public interface IPedidosRepository
     {
-        public void CrearPedido(Pedido pedido);
-        public void GuardarColaPedido();
-        public void GuardaCambios();
+        public  void CrearPedido(Pedido pedido);
+        public void GuardarColaPedido(PedidoCola cola);
+        public Task GuardaCambios(CancellationToken cancellationToken = default);
     }
 }

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pedidos.Api.DTOS;
+using Pedidos.Api.Dtos;
 using Pedidos.Api.Features.Pedidos.interfaces;
 
-namespace Ordenes.Api.Features.Pedidos
+namespace Pedidos.Api.Features.Pedidos
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -42,9 +42,9 @@ namespace Ordenes.Api.Features.Pedidos
         [ProducesResponseType(typeof(PedidosResponseDto), StatusCodes.Status201Created)]
        // [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CrarPedidos(PedidosCreateDto request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CrearPedidos(PedidosCreateDto request, CancellationToken cancellationToken)
         {
-            var result = await _pedidosServices.CrearPedidoAsync(request);
+            var result = await _pedidosServices.CrearPedidoAsync(request, cancellationToken);
 
             return CreatedAtAction(nameof(ConsultarPedido), new { id = result.Id }, result);
         }

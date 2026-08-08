@@ -1,4 +1,4 @@
-namespace Ordenes.Infraestructura.Entities
+namespace Pedidos.Infraestructura.Entities
 {
     public enum Status
     {

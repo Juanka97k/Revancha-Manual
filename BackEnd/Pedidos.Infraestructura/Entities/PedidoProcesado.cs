@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ordenes.Infraestructura.Entities
+namespace Pedidos.Infraestructura.Entities
 {
     public class PedidoProcesado
     {

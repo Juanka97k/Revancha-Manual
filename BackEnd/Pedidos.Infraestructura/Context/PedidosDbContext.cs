@@ -4,21 +4,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ordenes.Infraestructura.Context
+namespace Pedidos.Infraestructura.Context
 {
-    public class OrdenesDbContext : DbContext
+    public class PedidosDbContext : DbContext
     {
-        public OrdenesDbContext(DbContextOptions<OrdenesDbContext> options) : base(options)
+        public PedidosDbContext(DbContextOptions<PedidosDbContext> options) : base(options)
         {
         }
 
         public DbSet<Entities.Pedido> Pedidos => Set<Entities.Pedido>();
         public DbSet<Entities.Stock> Stocks => Set<Entities.Stock>();
         public DbSet<Entities.PedidoProcesado> PedidosProcesados => Set<Entities.PedidoProcesado>();
+        public DbSet<Entities.PedidoCola> PedidoCola => Set<Entities.PedidoCola>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Entities.PedidoCola>(entity =>
+            {
+                entity.HasKey(e => e.PedidoId);
+                entity.Property(e => e.PedidoId).IsRequired();
+                entity.Property(e => e.CreadoEn).IsRequired();
+            });
 
             modelBuilder.Entity<Entities.Pedido>(entity =>
             {
