@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pedidos.Api.Dtos;
 using Pedidos.Api.Features.Pedidos.interfaces;
@@ -44,7 +45,7 @@ namespace Pedidos.Api.Features.Pedidos
 
         [HttpPost]
         [ProducesResponseType(typeof(PedidosResponseDto), StatusCodes.Status201Created)]
-       // [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CrearPedidos(PedidosCreateDto request, CancellationToken cancellationToken)
         {
@@ -55,9 +56,32 @@ namespace Pedidos.Api.Features.Pedidos
                 return BadRequest(validationResult.Errors);
             }
 
-            var result = await _pedidosServices.CrearPedidoAsync(request, cancellationToken);
+            try
+            {
+                var result = await _pedidosServices.CrearPedidoAsync(request, cancellationToken);
 
-            return CreatedAtAction(nameof(ConsultarPedido), new { id = result.Id }, result);
+                return CreatedAtAction(nameof(ConsultarPedido), new { id = result.Id }, result);
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new ProblemDetails
+                    {
+                        Status = 500,
+                        Title = "Error de persistencia",
+                        Detail = "No fue posible guardar el pedido."
+                    });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Status = 400,
+                    Title = "No se pudo crear el pedido",
+                    Detail = ex.Message
+                });
+            }
         }
 
     }

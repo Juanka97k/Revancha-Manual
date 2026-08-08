@@ -23,7 +23,7 @@ namespace Pedidos.Api.Features.Sku
 
         public async Task<bool> SkuExisteAsync(string sku, CancellationToken cancellationToken)
         {
-            return await _context.Stocks.AnyAsync(s => s.Sku == sku, cancellationToken);
+            return await _context.Stocks.AnyAsync(s => s.Sku == sku.ToUpper(), cancellationToken);
         }
 
     }

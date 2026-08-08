@@ -7,6 +7,7 @@ using Pedidos.Api.Dtos;
 using Pedidos.Api.Features.Pedidos.interfaces;
 using Pedidos.Api.Features.Pedidos.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Pedidos.Api.Features.Sku;
 
 namespace Pedidos.Api.Features.Pedidos.Services
 {
@@ -15,15 +16,19 @@ namespace Pedidos.Api.Features.Pedidos.Services
         private readonly ILogger<PedidosServices> _logger;
         private readonly IPedidosMapper _pedidosMapper;
 
+        private readonly ISkuServices _skuServices;
+
         private readonly IPedidosRepository _pedidosRepository;
         public PedidosServices( 
             ILogger<PedidosServices> logger, 
             IPedidosMapper pedidosMapper, 
+            ISkuServices skuServices,
             IPedidosRepository pedidosRepository
             )
         {
             _logger = logger;
             _pedidosMapper = pedidosMapper;
+            _skuServices = skuServices;
             _pedidosRepository = pedidosRepository;
         }
         
@@ -32,6 +37,13 @@ namespace Pedidos.Api.Features.Pedidos.Services
         {
             try
             {
+
+               var skuExiste = await _skuServices.VerificarExistenciaSkuAsync(request.Sku, cancellationToken);
+                if (!skuExiste)
+                {
+                    throw new Exception($"El SKU '{request.Sku}' no existe en la base de datos.");
+                }
+                
                 var pedido = _pedidosMapper.PedidoMapper(request);
 
                  _pedidosRepository.CrearPedido(pedido);
