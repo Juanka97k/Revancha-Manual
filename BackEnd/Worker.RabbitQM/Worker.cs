@@ -13,4 +13,6 @@ public class RabbitMqWorker(ILogger<RabbitMqWorker> logger) : BackgroundService
             await Task.Delay(1000, stoppingToken);
         }
     }
+
+    
 }
