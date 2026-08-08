@@ -5,8 +5,13 @@ using System.Threading.Tasks;
 
 namespace Shared.Events
 {
-    public class OrdenCreateEvent
-    {
-        
-    }
+    public record PedidoCreateEvent
+    (
+        Guid EventoId,
+        Guid PedidoId,
+        string Sku,
+        int Cantidad,
+        DateTime CreadoEn
+    );
+
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pedidos.Api.DTOS;
+using Pedidos.Api.Features.Pedidos.interfaces;
 
 namespace Ordenes.Api.Features.Pedidos
 {
@@ -14,10 +15,12 @@ namespace Ordenes.Api.Features.Pedidos
     public class PedidosController : ControllerBase
     {
         private readonly ILogger<PedidosController> _logger;
+        private readonly IPedidosServices _pedidosServices;
 
-        public PedidosController(ILogger<PedidosController> logger)
+        public PedidosController(ILogger<PedidosController> logger, IPedidosServices pedidosServices)
         {
             _logger = logger;
+            _pedidosServices = pedidosServices;
         }
 
         [HttpGet]
@@ -36,9 +39,14 @@ namespace Ordenes.Api.Features.Pedidos
         }
 
         [HttpPost]
-        public IActionResult CrarPedidos(PedidosCreateDto request)
+        [ProducesResponseType(typeof(PedidosResponseDto), StatusCodes.Status201Created)]
+       // [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CrarPedidos(PedidosCreateDto request, CancellationToken cancellationToken)
         {
-            return CreatedAtAction(nameof(ConsultarPedido), new {id = request.Cantidad},request);
+            var result = await _pedidosServices.CrearPedidoAsync(request);
+
+            return CreatedAtAction(nameof(ConsultarPedido), new { id = result.Id }, result);
         }
 
     }
