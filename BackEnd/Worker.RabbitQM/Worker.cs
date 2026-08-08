@@ -17,13 +17,15 @@ public class RabbitMqWorker(
             var service = scope.ServiceProvider.GetRequiredService<IRabbitServices>();
 
             var pedidos = await service.BuscarPedidosSinProcesarAsync(stoppingToken);
+
             if (pedidos.Count > 0)
             {
-                logger.LogInformation("Pedidos sin procesar encontrados: {count}", pedidos.Count);
-                foreach (var pedido in pedidos)
+                var eventos = await service.GenerarColaPedidos(pedidos);
+
+                foreach (var pedido in eventos)
                 {
                     logger.LogInformation("PedidoId: {pedidoId}, Estado: {estado}, CreadoEn: {creadoEn}",
-                        pedido.PedidoId, pedido.Estado, pedido.CreadoEn);
+                        pedido.PedidoId, "ok", pedido.CreadoEn);
                 }
             }
             else

@@ -12,6 +12,7 @@ namespace Worker.RabbitQM.Repos
     public interface IRabbitRepository
     {
         Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken);
+        Task<List<Pedido>> BuscarPedidosSinProcesarAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken);
     }
 
     public class RabbitRepository : IRabbitRepository
@@ -34,6 +35,15 @@ namespace Worker.RabbitQM.Repos
                 p.CreadoEn
             ))
             .ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<Pedido>> BuscarPedidosSinProcesarAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken)
+        {
+            var pedidoIds = Pedidos.Select(p => p.PedidoId).ToList();
+
+            return await _context.Pedidos
+                .Where(p => pedidoIds.Contains(p.Id))
+                .ToListAsync(cancellationToken);
         }
 
     }
