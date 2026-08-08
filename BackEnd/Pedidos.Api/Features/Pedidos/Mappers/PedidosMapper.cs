@@ -35,6 +35,7 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
             return new PedidoCola
             {
                 PedidoId = pedido.Id,
+                Estado = EstadosProcesamiento.SinProcesar,
                 CreadoEn = DateTime.UtcNow
             };
         }

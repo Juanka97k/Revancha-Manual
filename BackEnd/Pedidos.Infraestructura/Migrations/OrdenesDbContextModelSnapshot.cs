@@ -58,6 +58,9 @@ namespace Pedidos.Infraestructura.Migrations
                     b.Property<DateTime>("CreadoEn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("Estado")
+                        .HasColumnType("integer");
+
                     b.HasKey("PedidoId");
 
                     b.ToTable("PedidoCola");
