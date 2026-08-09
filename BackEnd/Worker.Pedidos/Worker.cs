@@ -61,8 +61,8 @@ public class PedidosWorker: BackgroundService
 
             if (evento != null)
             {
-                _logger.LogInformation("Evento recibido desde RabbitMQ: EventId {EventId}, OrderId {OrderId}",
-                 evento.EventoId, evento.PedidoId);
+                _logger.LogInformation("Evento recibido desde RabbitMQ: EventId {EventId}",
+                 evento.EventoId);
 
                 // Crear un Scope fresco para resolver los servicios Scoped (DbContext)
                 // using var scope = _scopeFactory.CreateScope();

@@ -85,7 +85,7 @@ namespace Worker.RabbitQM.Services
         private async Task DeclararColaAsync(IChannel channel,CancellationToken cancellationToken)
         {
             await channel.QueueDeclareAsync(
-                queue: _configuration["RabbitMQ:QueueName"] ?? "pedidos_queue",
+                queue: _configuration["RabbitMQ:Queue"] ?? "Pedido-created-queue",
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
@@ -105,7 +105,7 @@ namespace Worker.RabbitQM.Services
 
             await channel.BasicPublishAsync(
                     exchange: string.Empty,
-                    routingKey: _configuration["RabbitMQ:QueueName"] ?? "pedidos_queue",
+                    routingKey: _configuration["RabbitMQ:Queue"] ?? "Pedido-created-queue",
                     mandatory: false,
                     basicProperties: properties,
                     body: body,
