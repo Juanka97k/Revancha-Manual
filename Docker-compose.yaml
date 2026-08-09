@@ -20,6 +20,24 @@ services:
     networks:
       - orderflow-net
 
+  # 2. Broker de Mensajería RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: orderflow-mq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"       # Puerto de mensajería AMQP
+      - "${RABBITMQ_MGMT_PORT:-15672}:15672" # Dashboard Web de RabbitMQ
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    networks:
+      - orderflow-net
 
 volumes:
   postgres_data:

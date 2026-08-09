@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Pedidos.Infraestructura.Context;
 using Pedidos.Infraestructura.Entities;
 using Shared.Dtos;
+using Shared.Events;
 
 namespace Worker.RabbitQM.Repos
 {
@@ -13,6 +14,7 @@ namespace Worker.RabbitQM.Repos
     {
         Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken);
         Task<List<Pedido>> BuscarPedidosSinProcesarAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken);
+        Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadosProcesamiento nuevoEstado, CancellationToken cancellationToken);
     }
 
     public class RabbitRepository : IRabbitRepository
@@ -44,6 +46,18 @@ namespace Worker.RabbitQM.Repos
             return await _context.Pedidos
                 .Where(p => pedidoIds.Contains(p.Id))
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadosProcesamiento nuevoEstado, CancellationToken cancellationToken)
+        {
+            var pedidoCola = await _context.PedidoCola
+                .FirstOrDefaultAsync(p => p.PedidoId == pedidos.PedidoId, cancellationToken);
+
+            if (pedidoCola != null)
+            {
+                pedidoCola.Estado = nuevoEstado;
+                await _context.SaveChangesAsync(cancellationToken);
+            }
         }
 
     }

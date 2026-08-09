@@ -11,6 +11,7 @@ builder.Services.AddDbContext<PedidosDbContext>(options =>
 
 builder.Services.AddScoped<IRabbitRepository, RabbitRepository>();
 builder.Services.AddScoped<IRabbitServices, RabbitServices>();
+builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
 
 builder.Services.AddHostedService<RabbitMqWorker>();
 

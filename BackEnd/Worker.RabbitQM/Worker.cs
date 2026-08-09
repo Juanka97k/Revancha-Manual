@@ -12,26 +12,26 @@ public class RabbitMqWorker(
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            // logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             using var scope = serviceScopeFactory.CreateScope();
+
             var service = scope.ServiceProvider.GetRequiredService<IRabbitServices>();
 
-            var pedidos = await service.BuscarPedidosSinProcesarAsync(stoppingToken);
+            await service.PrcoesarPedidosAsync(stoppingToken);
 
-            if (pedidos.Count > 0)
-            {
-                var eventos = await service.GenerarColaPedidos(pedidos);
+            // var pedidos = await service.BuscarPedidosSinProcesarAsync(stoppingToken);
 
-                foreach (var pedido in eventos)
-                {
-                    logger.LogInformation("PedidoId: {pedidoId}, Estado: {estado}, CreadoEn: {creadoEn}",
-                        pedido.PedidoId, "ok", pedido.CreadoEn);
-                }
-            }
-            else
-            {
-                logger.LogInformation("No se encontraron pedidos sin procesar.");
-            }
+            // if (pedidos.Count > 0)
+            // {
+            //     var eventos = await service.GenerarColaPedidos(pedidos);
+
+            //     await publisher.PublicarPedidosAsync(eventos, stoppingToken);
+            // }
+            // else
+            // {
+
+            // }
+
+            logger.LogInformation("Procesando pedidos.");
 
             await Task.Delay(5000, stoppingToken);
         }
