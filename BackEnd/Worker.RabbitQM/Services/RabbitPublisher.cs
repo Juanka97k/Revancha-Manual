@@ -14,6 +14,7 @@ namespace Worker.RabbitQM.Services
     public interface IRabbitPublisher
     {
         Task PublicarPedidosAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken);
+        Task InicializarConexionAsync(CancellationToken cancellationToken);
     }
 
     public class RabbitPublisher : IRabbitPublisher
@@ -37,8 +38,7 @@ namespace Worker.RabbitQM.Services
 
         public async Task PublicarPedidosAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken)
         {
-            await InicializarConexionAsync(cancellationToken);
-
+            
             var properties = new BasicProperties
             {
                 Persistent = true
@@ -46,7 +46,7 @@ namespace Worker.RabbitQM.Services
             await PublicarPedidoAsync(_channel, pedido, properties, cancellationToken); 
         }
 
-        private async Task InicializarConexionAsync(CancellationToken cancellationToken)
+        public async Task InicializarConexionAsync(CancellationToken cancellationToken)
         {
             if (_connection is not null &&
                 _connection.IsOpen &&

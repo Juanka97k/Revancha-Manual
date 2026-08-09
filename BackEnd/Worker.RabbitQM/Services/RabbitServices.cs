@@ -44,6 +44,8 @@ namespace Worker.RabbitQM.Services
 
                 var eventos = WRabbitMapper.MapearPedidosAEventos(pedidosCompletos);
 
+                await _rabbitPublisher.InicializarConexionAsync(cancellationToken);
+
                 foreach (var evento in eventos)
                 {
                     try
