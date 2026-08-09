@@ -26,6 +26,7 @@ namespace Pedidos.Infraestructura.Context
                 entity.HasKey(e => e.PedidoId);
                 entity.Property(e => e.PedidoId).IsRequired();
                 entity.Property(e => e.CreadoEn).IsRequired();
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<Entities.Pedido>(entity =>
