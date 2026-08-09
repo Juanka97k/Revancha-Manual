@@ -18,19 +18,6 @@ public class RabbitMqWorker(
 
             await service.PrcoesarPedidosAsync(stoppingToken);
 
-            // var pedidos = await service.BuscarPedidosSinProcesarAsync(stoppingToken);
-
-            // if (pedidos.Count > 0)
-            // {
-            //     var eventos = await service.GenerarColaPedidos(pedidos);
-
-            //     await publisher.PublicarPedidosAsync(eventos, stoppingToken);
-            // }
-            // else
-            // {
-
-            // }
-
             logger.LogInformation("Procesando pedidos.");
 
             await Task.Delay(5000, stoppingToken);

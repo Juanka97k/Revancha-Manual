@@ -48,8 +48,13 @@ namespace Worker.RabbitQM.Services
 
         private async Task InicializarConexionAsync(CancellationToken cancellationToken)
         {
-            if (_connection is not null && _connection.IsOpen)
+            if (_connection is not null &&
+                _connection.IsOpen &&
+                _channel is not null &&
+                _channel.IsOpen)
+            {
                 return;
+            }
 
             var factory = CrearConnectionFactory();
 
@@ -97,9 +102,7 @@ namespace Worker.RabbitQM.Services
 
             var body = Encoding.UTF8.GetBytes(message);
 
-            try
-            {
-                await channel.BasicPublishAsync(
+            await channel.BasicPublishAsync(
                     exchange: string.Empty,
                     routingKey: _configuration["RabbitMQ:QueueName"] ?? "pedidos_queue",
                     mandatory: false,
@@ -110,15 +113,6 @@ namespace Worker.RabbitQM.Services
                 _logger.LogInformation(
                     "Pedido publicado en RabbitMQ: {PedidoId}",
                     pedido.PedidoId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(
-                    ex,
-                    "Error al publicar el pedido en RabbitMQ. PedidoId: {PedidoId}",
-                    pedido.PedidoId);
-                throw;
-            }
         }
     }
 }

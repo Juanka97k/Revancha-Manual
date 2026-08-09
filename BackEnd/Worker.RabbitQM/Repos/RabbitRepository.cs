@@ -13,7 +13,7 @@ namespace Worker.RabbitQM.Repos
     public interface IRabbitRepository
     {
         Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken);
-        Task<List<Pedido>> BuscarPedidosSinProcesarAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken);
+        Task<List<Pedido>> BuscarPedidosAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken);
         Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadosProcesamiento nuevoEstado, CancellationToken cancellationToken);
     }
 
@@ -39,7 +39,7 @@ namespace Worker.RabbitQM.Repos
             .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<Pedido>> BuscarPedidosSinProcesarAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken)
+        public async Task<List<Pedido>> BuscarPedidosAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken)
         {
             var pedidoIds = Pedidos.Select(p => p.PedidoId).ToList();
 

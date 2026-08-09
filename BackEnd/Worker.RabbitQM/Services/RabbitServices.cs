@@ -12,8 +12,6 @@ namespace Worker.RabbitQM.Services
 {
     public interface IRabbitServices
     {
-        Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken);
-        Task<List<PedidoCreateEvent>> GenerarColaPedidos(List<PedidoColaDto> pedidos);
         Task PrcoesarPedidosAsync(CancellationToken cancellationToken);
     }
 
@@ -42,7 +40,7 @@ namespace Worker.RabbitQM.Services
                     return;
                 }
 
-                var pedidosCompletos = await _rabbitRepository.BuscarPedidosSinProcesarAsync(pedidos, cancellationToken);
+                var pedidosCompletos = await _rabbitRepository.BuscarPedidosAsync(pedidos, cancellationToken);
 
                 var eventos = WRabbitMapper.MapearPedidosAEventos(pedidosCompletos);
 
@@ -69,38 +67,6 @@ namespace Worker.RabbitQM.Services
                 throw;
             }
         }
-
-        public async Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken)
-        {
-            try
-            {
-                var pedidos = await _rabbitRepository.BuscarPedidosSinProcesarAsync(cancellationToken);
-                return pedidos;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al buscar pedidos sin procesar.");
-                throw;
-            }
-        }
-
-        public async Task<List<PedidoCreateEvent>> GenerarColaPedidos(List<PedidoColaDto> pedidos)
-        {
-            try
-            {
-                var pedidosCompletos = await _rabbitRepository.BuscarPedidosSinProcesarAsync(pedidos, CancellationToken.None);
-
-                var eventos = WRabbitMapper.MapearPedidosAEventos(pedidosCompletos);
-
-                return eventos;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al consultar pedidos.");
-                throw;
-            }
-        }
-
 
     }
 }
