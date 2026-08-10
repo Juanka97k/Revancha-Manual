@@ -9,6 +9,7 @@ namespace Shared.Dtos
     public record PedidoColaDto(
         Guid PedidoId,
         EstadoOutbox Estado,
+        string PayLoad,
         DateTime CreadoEn
     );
 

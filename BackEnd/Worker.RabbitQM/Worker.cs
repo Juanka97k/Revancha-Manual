@@ -16,7 +16,9 @@ public class RabbitMqWorker(
 
             var service = scope.ServiceProvider.GetRequiredService<IRabbitServices>();
 
-            await service.PrcoesarPedidosAsync(stoppingToken);
+            await service.PublicarPedidosAsync(stoppingToken);
+            
+            await service.PublicarPedidosProcesadoAsync(stoppingToken);
 
             logger.LogInformation("Procesando pedidos.");
 

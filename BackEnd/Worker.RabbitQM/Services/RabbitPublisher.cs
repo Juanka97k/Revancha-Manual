@@ -14,7 +14,7 @@ namespace Worker.RabbitQM.Services
     public interface IRabbitPublisher
     {
         Task PublicarPedidosAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken);
-
+        Task PublicarPedidoProcesadoAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken);
         Task InicializarConexionAsync(CancellationToken cancellationToken);
     }
 
@@ -24,7 +24,8 @@ namespace Worker.RabbitQM.Services
         private readonly IConfiguration _configuration;
 
         private IConnection? _connection;
-        private IChannel? _channel;
+        private IChannel? _channelPedidos;
+        private IChannel? _channelProcesados;
 
         public RabbitPublisher(
             ILogger<RabbitPublisher> logger,
@@ -44,15 +45,27 @@ namespace Worker.RabbitQM.Services
             {
                 Persistent = true
             };
-            await PublicarPedidoAsync(_channel, pedido, properties, cancellationToken); 
+            await PublicarPedidoAsync(_channelPedidos, pedido, properties, cancellationToken); 
+        }
+
+        public async Task PublicarPedidoProcesadoAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken)
+        {
+
+            var properties = new BasicProperties
+            {
+                Persistent = true
+            };
+            await PublicarPedidoProcesadoAsync(_channelProcesados, pedido, properties, cancellationToken); 
         }
 
         public async Task InicializarConexionAsync(CancellationToken cancellationToken)
         {
             if (_connection is not null &&
                 _connection.IsOpen &&
-                _channel is not null &&
-                _channel.IsOpen)
+                _channelPedidos is not null &&
+                _channelPedidos.IsOpen &&
+                _channelProcesados is not null &&
+                _channelProcesados.IsOpen)
             {
                 return;
             }
@@ -62,11 +75,19 @@ namespace Worker.RabbitQM.Services
             _connection = await factory.CreateConnectionAsync(
                 cancellationToken);
 
-            _channel = await _connection.CreateChannelAsync(
+            _channelPedidos = await _connection.CreateChannelAsync(
                 cancellationToken: cancellationToken);
 
-            await DeclararColaAsync(
-                _channel,
+            
+            _channelProcesados = await _connection.CreateChannelAsync(
+                cancellationToken: cancellationToken);
+
+            await DeclararColaPedidosAsync(
+                _channelPedidos,
+                cancellationToken);
+
+            await DeclararColaProcesadosAsync(
+                _channelProcesados,
                 cancellationToken);
 
             _logger.LogInformation(
@@ -82,10 +103,21 @@ namespace Worker.RabbitQM.Services
             };
         }
 
-        private async Task DeclararColaAsync(IChannel channel,CancellationToken cancellationToken)
+        private async Task DeclararColaPedidosAsync(IChannel channel,CancellationToken cancellationToken)
         {
             await channel.QueueDeclareAsync(
-                queue: _configuration["RabbitMQ:Queue"] ?? "Pedido-created-queue",
+                queue: _configuration["RabbitMQ:QueuePedidos"] ?? "Pedido-created-queue",
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null,
+                cancellationToken: cancellationToken);
+        }
+
+        private async Task DeclararColaProcesadosAsync(IChannel channel,CancellationToken cancellationToken)
+        {
+            await channel.QueueDeclareAsync(
+                queue: _configuration["RabbitMQ:QueueProcesados"] ?? "pedido-processed-queue",
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
@@ -113,6 +145,29 @@ namespace Worker.RabbitQM.Services
 
                 _logger.LogInformation(
                     "Pedido publicado en RabbitMQ: {PedidoId}",
+                    pedido.PedidoId);
+        }
+
+        private async Task PublicarPedidoProcesadoAsync(
+            IChannel channel,
+            PedidoCreateEvent pedido,
+            BasicProperties properties,
+            CancellationToken cancellationToken)
+        {
+            var message = JsonSerializer.Serialize(pedido);
+
+            var body = Encoding.UTF8.GetBytes(message);
+
+            await channel.BasicPublishAsync(
+                    exchange: string.Empty,
+                    routingKey: _configuration["RabbitMQ:QueueProcesados"] ?? "pedido-processed-queue",
+                    mandatory: false,
+                    basicProperties: properties,
+                    body: body,
+                    cancellationToken: cancellationToken);
+
+                _logger.LogInformation(
+                    "Pedido procesado publicado en RabbitMQ: {PedidoId}",
                     pedido.PedidoId);
         }
     }

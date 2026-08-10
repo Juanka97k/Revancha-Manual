@@ -29,11 +29,13 @@ namespace Worker.RabbitQM.Repos
         public async Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken)
         {
             return await _context.MensajesOutbox
-            .Where(p => p.Estado == EstadoOutbox.SinProcesar)
+            .Where(p => p.Estado == EstadoOutbox.SinProcesar 
+            && p.TipoEvento == nameof(PedidoCreateEvent).ToString())
             .OrderBy(p => p.CreadoEn)
             .Select(p => new PedidoColaDto(
                 p.PedidoId,
                 p.Estado,
+                p.Payload,
                 p.CreadoEn
             ))
             .ToListAsync(cancellationToken);
