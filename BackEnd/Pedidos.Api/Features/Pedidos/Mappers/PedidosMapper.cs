@@ -44,7 +44,8 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
             return new MensajesOutbox
             {
                 Id = evento.EventoId,
-                TipoEvento = nameof(PedidoCreateEvent),
+                PedidoId = evento.PedidoId,
+                TipoEvento = nameof(PedidoCreateEvent).ToString(),
                 Payload = eventoSerialize,
                 CreadoEn = DateTime.UtcNow,
                 Estado = EstadoOutbox.SinProcesar
