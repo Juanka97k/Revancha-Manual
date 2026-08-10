@@ -11,7 +11,7 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
     public interface IPedidosMapper
     {
         Pedido PedidoMapper(PedidosCreateDto request);
-        PedidoCola PedidoColaMapper(Pedido pedido);
+        MensajesOutbox PedidoColaMapper(Pedido pedido);
         PedidosResponseDto PedidoResponseMapper(Pedido pedido);
     }
 
@@ -30,9 +30,9 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
             };
         }
 
-        public PedidoCola PedidoColaMapper(Pedido pedido)
+        public MensajesOutbox PedidoColaMapper(Pedido pedido)
         {
-            return new PedidoCola
+            return new MensajesOutbox
             {
                 PedidoId = pedido.Id,
                 Estado = EstadosProcesamiento.SinProcesar,

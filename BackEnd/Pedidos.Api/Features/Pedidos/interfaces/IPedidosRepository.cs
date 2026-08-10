@@ -9,7 +9,7 @@ namespace Pedidos.Api.Features.Pedidos.interfaces
     public interface IPedidosRepository
     {
         public  void CrearPedido(Pedido pedido);
-        public void GuardarColaPedido(PedidoCola cola);
+        public void GuardarColaPedido(MensajesOutbox cola);
         public Task GuardaCambios(CancellationToken cancellationToken = default);
     }
 }

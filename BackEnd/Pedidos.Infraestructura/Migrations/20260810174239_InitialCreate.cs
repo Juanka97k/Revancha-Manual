@@ -14,11 +14,27 @@ namespace Pedidos.Infraestructura.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "PedidoCola",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PedidoId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TipoEvento = table.Column<string>(type: "text", nullable: false),
+                    Payload = table.Column<string>(type: "text", nullable: false),
+                    CreadoEn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Estado = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PedidoCola", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pedidos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    NombreCliente = table.Column<string>(type: "text", nullable: false),
+                    NombreCliente = table.Column<string>(type: "text", nullable: true),
                     Sku = table.Column<string>(type: "text", nullable: false),
                     Cantidad = table.Column<int>(type: "integer", nullable: false),
                     Estado = table.Column<int>(type: "integer", nullable: false),
@@ -33,12 +49,12 @@ namespace Pedidos.Infraestructura.Migrations
                 name: "PedidosProcesados",
                 columns: table => new
                 {
-                    PedidoId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EventoId = table.Column<Guid>(type: "uuid", nullable: false),
                     FechaProcesamiento = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PedidosProcesados", x => x.PedidoId);
+                    table.PrimaryKey("PK_PedidosProcesados", x => x.EventoId);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,6 +83,9 @@ namespace Pedidos.Infraestructura.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "PedidoCola");
+
             migrationBuilder.DropTable(
                 name: "Pedidos");
 

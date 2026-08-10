@@ -15,16 +15,19 @@ namespace Pedidos.Infraestructura.Context
         public DbSet<Entities.Pedido> Pedidos => Set<Entities.Pedido>();
         public DbSet<Entities.Stock> Stocks => Set<Entities.Stock>();
         public DbSet<Entities.PedidoProcesado> PedidosProcesados => Set<Entities.PedidoProcesado>();
-        public DbSet<Entities.PedidoCola> PedidoCola => Set<Entities.PedidoCola>();
+        public DbSet<Entities.MensajesOutbox> PedidoCola => Set<Entities.MensajesOutbox>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Entities.PedidoCola>(entity =>
+            modelBuilder.Entity<Entities.MensajesOutbox>(entity =>
             {
-                entity.HasKey(e => e.PedidoId);
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.PedidoId).IsRequired();
+                entity.Property(e => e.TipoEvento).IsRequired();
+                entity.Property(e => e.Payload).IsRequired();
                 entity.Property(e => e.CreadoEn).IsRequired();
                 entity.Property(e => e.Estado).IsRequired();
             });

@@ -11,7 +11,7 @@ using Pedidos.Infraestructura.Context;
 namespace Pedidos.Infraestructura.Migrations
 {
     [DbContext(typeof(PedidosDbContext))]
-    partial class OrdenesDbContextModelSnapshot : ModelSnapshot
+    partial class PedidosDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,34 @@ namespace Pedidos.Infraestructura.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Pedidos.Infraestructura.Entities.MensajesOutbox", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreadoEn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("PedidoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TipoEvento")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PedidoCola");
+                });
 
             modelBuilder.Entity("Pedidos.Infraestructura.Entities.Pedido", b =>
                 {
@@ -47,23 +75,6 @@ namespace Pedidos.Infraestructura.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Pedidos");
-                });
-
-            modelBuilder.Entity("Pedidos.Infraestructura.Entities.PedidoCola", b =>
-                {
-                    b.Property<Guid>("PedidoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreadoEn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("integer");
-
-                    b.HasKey("PedidoId");
-
-                    b.ToTable("PedidoCola");
                 });
 
             modelBuilder.Entity("Pedidos.Infraestructura.Entities.PedidoProcesado", b =>
