@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace Shared.Events
 {
-    public record PedidoProcesadaEvent
+    public record PedidoProcesadoEvent
     (
-        Guid PedidoId,
-        string Estado,
+        Guid EventoId,
         DateTime FechaProcesamiento
     );
 }

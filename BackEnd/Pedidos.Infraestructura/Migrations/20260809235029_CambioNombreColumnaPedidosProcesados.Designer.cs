@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pedidos.Infraestructura.Context;
@@ -11,9 +12,11 @@ using Pedidos.Infraestructura.Context;
 namespace Pedidos.Infraestructura.Migrations
 {
     [DbContext(typeof(PedidosDbContext))]
-    partial class OrdenesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260809235029_CambioNombreColumnaPedidosProcesados")]
+    partial class CambioNombreColumnaPedidosProcesados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

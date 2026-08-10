@@ -3,6 +3,7 @@ using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Shared.Events;
+using Worker.Pedidos.Services;
 
 namespace Worker.Pedidos;
 
@@ -10,14 +11,17 @@ public class PedidosWorker: BackgroundService
 {
     private readonly ILogger<PedidosWorker> _logger;
     private readonly IRabbitConfig _rabbitConfig;
+    private readonly IServiceScopeFactory _scopeFactory;
     
     public PedidosWorker( 
         ILogger<PedidosWorker> logger,
-        IRabbitConfig rabbitConfig
+        IRabbitConfig rabbitConfig,
+        IServiceScopeFactory scopeFactory
     )
     {
         _logger = logger;
         _rabbitConfig = rabbitConfig;
+        _scopeFactory = scopeFactory;
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -64,15 +68,15 @@ public class PedidosWorker: BackgroundService
                 _logger.LogInformation("Evento recibido desde RabbitMQ: EventId {EventId}",
                  evento.EventoId);
 
-                // Crear un Scope fresco para resolver los servicios Scoped (DbContext)
-                // using var scope = _scopeFactory.CreateScope();
-                // var processor = scope.ServiceProvider.GetRequiredService<IInventoryProcessor>();
+                // Crear un Scope fresco para resolver los servicios Scoped 
+                using var scope = _scopeFactory.CreateScope();
+                var processor = scope.ServiceProvider.GetRequiredService<IRabbitService>();
 
-                // await processor.ProcessOrderCreatedAsync(evento, stoppingToken);
+                 await processor.ProcesarPedidoAsync(evento, cancellationToken);
             }
             // Confirmación exitosa 
-            //await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false, cancellationToken: cancellationToken);
-            await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true, cancellationToken: cancellationToken);
+            await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false, cancellationToken: cancellationToken);
+            //await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true, cancellationToken: cancellationToken);
          }
         catch (Exception ex)
         {

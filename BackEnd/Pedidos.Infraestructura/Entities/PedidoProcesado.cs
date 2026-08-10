@@ -7,7 +7,7 @@ namespace Pedidos.Infraestructura.Entities
 {
     public class PedidoProcesado
     {
-        public Guid PedidoId { get; set; }
+        public Guid EventoId { get; set; }
         public DateTime FechaProcesamiento { get; set; } = DateTime.UtcNow;
     }
 }

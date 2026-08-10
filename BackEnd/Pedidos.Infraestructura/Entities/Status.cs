@@ -3,7 +3,7 @@ namespace Pedidos.Infraestructura.Entities
     public enum Status
     {
         Pendiente = 0,
-        Procesada = 1,
-        Cancelada = 2
+        Confirmada = 1,
+        Rechazada = 2
     }
 }

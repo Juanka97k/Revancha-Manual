@@ -55,7 +55,7 @@ namespace Pedidos.Infraestructura.Context
 
             modelBuilder.Entity<Entities.PedidoProcesado>(entity =>
             {
-                entity.HasKey(e => e.PedidoId);
+                entity.HasKey(e => e.EventoId);
                 entity.Property(e => e.FechaProcesamiento).IsRequired();
             });
         }
