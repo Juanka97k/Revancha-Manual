@@ -8,7 +8,7 @@ namespace Shared.Dtos
 {
     public record PedidoColaDto(
         Guid PedidoId,
-        EstadosProcesamiento Estado,
+        EstadoOutbox Estado,
         DateTime CreadoEn
     );
 

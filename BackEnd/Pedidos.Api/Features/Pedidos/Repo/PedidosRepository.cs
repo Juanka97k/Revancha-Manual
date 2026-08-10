@@ -30,7 +30,7 @@ namespace Pedidos.Api.Features.Pedidos.Repo
 
         public void GuardarColaPedido(MensajesOutbox cola)
         {
-            _context.PedidoCola.Add(cola);
+            _context.MensajesOutbox.Add(cola);
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Pedidos.Infraestructura.Entities
 {
-    public enum EstadosProcesamiento
+    public enum EstadoOutbox
     {
         SinProcesar = 0,
         Publicado = 1,

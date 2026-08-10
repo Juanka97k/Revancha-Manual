@@ -51,7 +51,7 @@ namespace Worker.RabbitQM.Services
                     try
                     {
                         await _rabbitPublisher.PublicarPedidosAsync(evento, cancellationToken);
-                        await _rabbitRepository.ActualizarEstadoPedidoAsync(evento, EstadosProcesamiento.Publicado, cancellationToken);
+                        await _rabbitRepository.ActualizarEstadoPedidoAsync(evento, EstadoOutbox.Publicado, cancellationToken);
                     }
                     catch (Exception ex)
                     {

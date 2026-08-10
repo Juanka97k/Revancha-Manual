@@ -12,7 +12,7 @@ using Pedidos.Infraestructura.Context;
 namespace Pedidos.Infraestructura.Migrations
 {
     [DbContext(typeof(PedidosDbContext))]
-    [Migration("20260810174239_InitialCreate")]
+    [Migration("20260810174907_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace Pedidos.Infraestructura.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PedidoCola");
+                    b.ToTable("MensajesOutbox");
                 });
 
             modelBuilder.Entity("Pedidos.Infraestructura.Entities.Pedido", b =>

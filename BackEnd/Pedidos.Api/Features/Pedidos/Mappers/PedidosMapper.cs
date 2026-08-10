@@ -1,23 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Pedidos.Api.Dtos;
 using Pedidos.Api.Features.Pedidos.interfaces;
 using Pedidos.Infraestructura.Entities;
+using Shared.Events;
 
 namespace Pedidos.Api.Features.Pedidos.Mappers
 {
-    public interface IPedidosMapper
-    {
-        Pedido PedidoMapper(PedidosCreateDto request);
-        MensajesOutbox PedidoColaMapper(Pedido pedido);
-        PedidosResponseDto PedidoResponseMapper(Pedido pedido);
-    }
 
-    public class PedidosMapper : IPedidosMapper
+    public static class PedidosMapper
     {
-        public Pedido PedidoMapper(PedidosCreateDto request)
+        public static Pedido PedidoMapper(PedidosCreateDto request)
         {
             return new Pedido
             {
@@ -30,17 +26,33 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
             };
         }
 
-        public MensajesOutbox PedidoColaMapper(Pedido pedido)
+        public static PedidoCreateEvent PedidoCreateEventMapper(PedidosCreateDto request,Guid pedidoId)
         {
+            return new PedidoCreateEvent(
+                Guid.NewGuid(),
+                pedidoId,
+                request.Sku.ToUpper(),
+                request.Cantidad,
+                DateTime.UtcNow
+            );
+        }
+
+        public static MensajesOutbox PedidoColaMapper(PedidoCreateEvent evento)
+        {
+            var eventoSerialize = JsonSerializer.Serialize(evento);
+
             return new MensajesOutbox
             {
-                PedidoId = pedido.Id,
-                Estado = EstadosProcesamiento.SinProcesar,
-                CreadoEn = DateTime.UtcNow
+                Id = evento.EventoId,
+                TipoEvento = nameof(PedidoCreateEvent),
+                Payload = eventoSerialize,
+                CreadoEn = DateTime.UtcNow,
+                Estado = EstadoOutbox.SinProcesar
+                
             };
         }
 
-        public PedidosResponseDto PedidoResponseMapper(Pedido pedido)
+        public static PedidosResponseDto PedidoResponseMapper(Pedido pedido)
         {
             return new PedidosResponseDto(
                 pedido.Id,

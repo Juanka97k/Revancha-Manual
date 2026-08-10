@@ -15,7 +15,7 @@ namespace Pedidos.Infraestructura.Context
         public DbSet<Entities.Pedido> Pedidos => Set<Entities.Pedido>();
         public DbSet<Entities.Stock> Stocks => Set<Entities.Stock>();
         public DbSet<Entities.PedidoProcesado> PedidosProcesados => Set<Entities.PedidoProcesado>();
-        public DbSet<Entities.MensajesOutbox> PedidoCola => Set<Entities.MensajesOutbox>();
+        public DbSet<Entities.MensajesOutbox> MensajesOutbox => Set<Entities.MensajesOutbox>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

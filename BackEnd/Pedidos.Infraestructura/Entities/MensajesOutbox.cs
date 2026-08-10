@@ -17,6 +17,6 @@ namespace Pedidos.Infraestructura.Entities
 
         public DateTime CreadoEn { get; set; }
 
-        public EstadosProcesamiento Estado { get; set; }
+        public EstadoOutbox Estado { get; set; }
     }
 }

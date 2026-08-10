@@ -14,7 +14,7 @@ namespace Worker.RabbitQM.Repos
     {
         Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken);
         Task<List<Pedido>> BuscarPedidosAsync(List<PedidoColaDto> Pedidos, CancellationToken cancellationToken);
-        Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadosProcesamiento nuevoEstado, CancellationToken cancellationToken);
+        Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadoOutbox nuevoEstado, CancellationToken cancellationToken);
     }
 
     public class RabbitRepository : IRabbitRepository
@@ -28,8 +28,8 @@ namespace Worker.RabbitQM.Repos
 
         public async Task<List<PedidoColaDto>> BuscarPedidosSinProcesarAsync(CancellationToken cancellationToken)
         {
-            return await _context.PedidoCola
-            .Where(p => p.Estado == EstadosProcesamiento.SinProcesar)
+            return await _context.MensajesOutbox
+            .Where(p => p.Estado == EstadoOutbox.SinProcesar)
             .OrderBy(p => p.CreadoEn)
             .Select(p => new PedidoColaDto(
                 p.PedidoId,
@@ -48,9 +48,9 @@ namespace Worker.RabbitQM.Repos
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadosProcesamiento nuevoEstado, CancellationToken cancellationToken)
+        public async Task ActualizarEstadoPedidoAsync(PedidoCreateEvent pedidos, EstadoOutbox nuevoEstado, CancellationToken cancellationToken)
         {
-            var pedidoCola = await _context.PedidoCola
+            var pedidoCola = await _context.MensajesOutbox
                 .FirstOrDefaultAsync(p => p.PedidoId == pedidos.PedidoId, cancellationToken);
 
             if (pedidoCola != null)

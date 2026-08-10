@@ -62,7 +62,7 @@ static void PedidosConfigureServices(
     IServiceCollection services)
 {
     services.AddScoped<IPedidosServices, PedidosServices>();
-    services.AddScoped<IPedidosMapper, PedidosMapper>();
+    //services.AddScoped<IPedidosMapper, PedidosMapper>();
     services.AddScoped<IPedidosRepository, PedidosRepository>();
     services.AddValidatorsFromAssemblyContaining<PedidosCreateDtoValidator>();
 }

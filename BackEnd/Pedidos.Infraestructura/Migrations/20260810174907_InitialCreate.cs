@@ -14,7 +14,7 @@ namespace Pedidos.Infraestructura.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PedidoCola",
+                name: "MensajesOutbox",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -26,7 +26,7 @@ namespace Pedidos.Infraestructura.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PedidoCola", x => x.Id);
+                    table.PrimaryKey("PK_MensajesOutbox", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,7 +84,7 @@ namespace Pedidos.Infraestructura.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PedidoCola");
+                name: "MensajesOutbox");
 
             migrationBuilder.DropTable(
                 name: "Pedidos");

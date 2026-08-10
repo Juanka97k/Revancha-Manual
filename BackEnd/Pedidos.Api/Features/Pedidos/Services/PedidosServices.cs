@@ -14,20 +14,20 @@ namespace Pedidos.Api.Features.Pedidos.Services
     public class PedidosServices : IPedidosServices
     {
         private readonly ILogger<PedidosServices> _logger;
-        private readonly IPedidosMapper _pedidosMapper;
+        //private readonly IPedidosMapper _pedidosMapper;
 
         private readonly ISkuServices _skuServices;
 
         private readonly IPedidosRepository _pedidosRepository;
         public PedidosServices( 
             ILogger<PedidosServices> logger, 
-            IPedidosMapper pedidosMapper, 
+            //IPedidosMapper pedidosMapper, 
             ISkuServices skuServices,
             IPedidosRepository pedidosRepository
             )
         {
             _logger = logger;
-            _pedidosMapper = pedidosMapper;
+            //_pedidosMapper = pedidosMapper;
             _skuServices = skuServices;
             _pedidosRepository = pedidosRepository;
         }
@@ -44,17 +44,19 @@ namespace Pedidos.Api.Features.Pedidos.Services
                     throw new Exception($"El SKU '{request.Sku}' no existe en la base de datos.");
                 }
                 
-                var pedido = _pedidosMapper.PedidoMapper(request);
+                var pedido = PedidosMapper.PedidoMapper(request);
 
-                 _pedidosRepository.CrearPedido(pedido);
+                _pedidosRepository.CrearPedido(pedido);
 
-                var cola = _pedidosMapper.PedidoColaMapper(pedido);
+                var evento = PedidosMapper.PedidoCreateEventMapper(request,pedido.Id);
 
-                 _pedidosRepository.GuardarColaPedido(cola);
+                var eventoResult = PedidosMapper.PedidoColaMapper(evento);
+
+                _pedidosRepository.GuardarColaPedido(eventoResult);
 
                 await _pedidosRepository.GuardaCambios(cancellationToken);
 
-                var response = _pedidosMapper.PedidoResponseMapper(pedido);
+                var response = PedidosMapper.PedidoResponseMapper(pedido);
 
                 return response;
             }
