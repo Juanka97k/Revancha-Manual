@@ -7,7 +7,8 @@ namespace Shared.Events
 {
     public record PedidoProcesadoEvent
     (
-        Guid EventoId,
+        Guid PedidoId,
+        string Estado, 
         DateTime FechaProcesamiento
     );
 }

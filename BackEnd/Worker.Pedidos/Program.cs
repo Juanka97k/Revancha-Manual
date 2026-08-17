@@ -10,8 +10,8 @@ builder.Services.AddDbContext<PedidosDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
     
 builder.Services.AddSingleton<IRabbitConfig, RabbitConfig>();
-builder.Services.AddScoped<IRabbitService, RabbitService>();
-builder.Services.AddScoped<IRabbitRepository, RabbitRepository>();
+builder.Services.AddScoped<IProcesarPedidoService, ProcesarPedidoService>();
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 
 builder.Services.AddHostedService<PedidosWorker>();
 

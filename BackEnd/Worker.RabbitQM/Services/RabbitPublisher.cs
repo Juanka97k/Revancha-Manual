@@ -137,7 +137,7 @@ namespace Worker.RabbitQM.Services
 
             await channel.BasicPublishAsync(
                     exchange: string.Empty,
-                    routingKey: _configuration["RabbitMQ:Queue"] ?? "Pedido-created-queue",
+                    routingKey: _configuration["RabbitMQ:QueuePedidos"] ?? "Pedido-created-queue",
                     mandatory: false,
                     basicProperties: properties,
                     body: body,

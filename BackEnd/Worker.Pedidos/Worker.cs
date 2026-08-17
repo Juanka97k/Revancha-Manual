@@ -26,35 +26,34 @@ public class PedidosWorker: BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
 
-        var (connection, channel) =await _rabbitConfig.CrearConexionAsync(stoppingToken);
+        //var (connection, channel) =await _rabbitConfig.CrearConexionAsync(stoppingToken);
+
+        await _rabbitConfig.InicializarConexionAsync(stoppingToken);
 
         if (stoppingToken.IsCancellationRequested) return;
 
-        await _rabbitConfig.DeclararColaAsync(channel,stoppingToken);
+        //await _rabbitConfig.DeclararColaPedidosAsync(channel,stoppingToken);
 
-        await _rabbitConfig.ConfiguracionDeProcesamientoAsync(channel, stoppingToken);
-
-        var consumidor = new AsyncEventingBasicConsumer(channel);
+        var consumidor =  _rabbitConfig.DeclararConsumidor();
 
         consumidor.ReceivedAsync += async (model, ea) =>
         {
             await ProcesarMensajeAsync(
-                channel,
                 ea,
                 stoppingToken);
         };
 
-        await _rabbitConfig.ConsumirColaAsync(channel,consumidor,stoppingToken);
+        await _rabbitConfig.ConsumirColaPedidosAsync(consumidor,stoppingToken);
 
         _logger.LogInformation("Worker escuchando la cola RabbitMQ.");
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(2000, stoppingToken);
         }
     }
 
-    private async Task ProcesarMensajeAsync(IChannel channel,BasicDeliverEventArgs ea,CancellationToken cancellationToken)
+    private async Task ProcesarMensajeAsync(BasicDeliverEventArgs ea,CancellationToken cancellationToken)
     {
         var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
@@ -70,18 +69,20 @@ public class PedidosWorker: BackgroundService
 
                 // Crear un Scope fresco para resolver los servicios Scoped 
                 using var scope = _scopeFactory.CreateScope();
-                var processor = scope.ServiceProvider.GetRequiredService<IRabbitService>();
+                var processor = scope.ServiceProvider.GetRequiredService<IProcesarPedidoService>();
 
                  await processor.ProcesarPedidoAsync(evento, cancellationToken);
             }
             // Confirmación exitosa 
-            await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false, cancellationToken: cancellationToken);
+            //await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false, cancellationToken: cancellationToken);
             //await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true, cancellationToken: cancellationToken);
+            await _rabbitConfig.ExitosoProcesamientoPedidoAsync(ea,cancellationToken);
          }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error procesando el mensaje de RabbitMQ. Se enviará Nack para reintento.");
-            await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true, cancellationToken: cancellationToken);
+            //await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true, cancellationToken: cancellationToken);
+            await _rabbitConfig.FalloProcesamientoPedidoAsync(ea,cancellationToken);
         }
     }
 }

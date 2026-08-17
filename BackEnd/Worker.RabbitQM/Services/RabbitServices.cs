@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Pedidos.Infraestructura.Entities;
 using Shared.Events;
 using Worker.RabbitQM.Repos;
 
@@ -44,23 +45,23 @@ namespace Worker.RabbitQM.Services
 
                 // var eventos = WRabbitMapper.MapearPedidosAEventos(pedidosCompletos);
 
-                // await _rabbitPublisher.InicializarConexionAsync(cancellationToken);
+                await _rabbitPublisher.InicializarConexionAsync(cancellationToken);
 
-                // foreach (var evento in eventos)
-                // {
-                //     try
-                //     {
-                //         await _rabbitPublisher.PublicarPedidosAsync(evento, cancellationToken);
-                //         await _rabbitRepository.ActualizarEstadoPedidoAsync(evento, EstadoOutbox.Publicado, cancellationToken);
-                //     }
-                //     catch (Exception ex)
-                //     {
-                //         _logger.LogError(
-                //             ex,
-                //             "Error procesando pedido {PedidoId}",
-                //             evento.PedidoId);
-                //     }
-                // }
+                foreach (var evento in eventos)
+                {
+                    try
+                    {
+                        await _rabbitPublisher.PublicarPedidosAsync(evento, cancellationToken);
+                        await _rabbitRepository.ActualizarEstadoPedidoAsync(evento, EstadoOutbox.Publicado, cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(
+                            ex,
+                            "Error procesando pedido {PedidoId}",
+                            evento.PedidoId);
+                    }
+                }
 
             }
             catch (Exception ex)
