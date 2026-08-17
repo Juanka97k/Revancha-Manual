@@ -8,6 +8,8 @@ using Pedidos.Api.Features.Pedidos.Services;
 using FluentValidation;
 using Pedidos.Api.Features.Pedidos;
 using Pedidos.Api.Features.Sku;
+using Pedidos.Api.Features.WebApi;
+using Pedidos.Api.Features.BackGround;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,13 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+
+// 1. Agregar servicios de SignalR
+builder.Services.AddSignalR();
+
+// 6. Registrar Consumidor de RabbitMQ en Segundo Plano (Transmisor a SignalR)
+builder.Services.AddHostedService<PredidosProcesadosConsumerServices>();
+
 //conexion a la base de datos
 var connectionString = builder.Configuration.GetConnectionString("Postgres");
 builder.Services.AddDbContext<PedidosDbContext>(options =>
@@ -24,6 +33,8 @@ builder.Services.AddDbContext<PedidosDbContext>(options =>
 
 PedidosConfigureServices(builder.Services);
 SkuConfigureServices(builder.Services);
+
+builder.Services.AddSingleton<IRabbitConfig, RabbitConfig>();
 
 
 // Add services to the container.
@@ -54,6 +65,9 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<PedidosDbContext>();
     await dbContext.Database.MigrateAsync();
 }
+
+// 2. Mapear la ruta del Hub
+app.MapHub<PedidosHub>("/hubs/pedidos");
 
 app.Run();
 
