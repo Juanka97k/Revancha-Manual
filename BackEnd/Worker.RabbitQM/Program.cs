@@ -9,9 +9,9 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddDbContext<PedidosDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IRabbitRepository, RabbitRepository>();
-builder.Services.AddScoped<IRabbitServices, RabbitServices>();
-builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
+builder.Services.AddScoped<IPedidosPublishRepository, PedidosPublishRepository>();
+builder.Services.AddScoped<IPedidosPublishServices, PedidosPublishServices>();
+builder.Services.AddSingleton<IRabbitConfigs, RabbitConfigs>();
 
 builder.Services.AddHostedService<RabbitMqWorker>();
 

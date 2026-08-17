@@ -11,24 +11,24 @@ using Worker.RabbitQM.Repos;
 
 namespace Worker.RabbitQM.Services
 {
-    public interface IRabbitPublisher
+    public interface IRabbitConfigs
     {
         Task PublicarPedidosAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken);
-        Task PublicarPedidoProcesadoAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken);
+        Task PublicarPedidoProcesadoAsync(PedidoProcesadoEvent pedido, CancellationToken cancellationToken);
         Task InicializarConexionAsync(CancellationToken cancellationToken);
     }
 
-    public class RabbitPublisher : IRabbitPublisher
+    public class RabbitConfigs : IRabbitConfigs
     {
-        private readonly ILogger<RabbitPublisher> _logger;
+        private readonly ILogger<RabbitConfigs> _logger;
         private readonly IConfiguration _configuration;
 
         private IConnection? _connection;
         private IChannel? _channelPedidos;
         private IChannel? _channelProcesados;
 
-        public RabbitPublisher(
-            ILogger<RabbitPublisher> logger,
+        public RabbitConfigs(
+            ILogger<RabbitConfigs> logger,
             //abbitRepository rabbitRepository,
             IConfiguration configuration
         )
@@ -48,7 +48,7 @@ namespace Worker.RabbitQM.Services
             await PublicarPedidoAsync(_channelPedidos, pedido, properties, cancellationToken); 
         }
 
-        public async Task PublicarPedidoProcesadoAsync(PedidoCreateEvent pedido, CancellationToken cancellationToken)
+        public async Task PublicarPedidoProcesadoAsync(PedidoProcesadoEvent pedido, CancellationToken cancellationToken)
         {
 
             var properties = new BasicProperties
@@ -150,7 +150,7 @@ namespace Worker.RabbitQM.Services
 
         private async Task PublicarPedidoProcesadoAsync(
             IChannel channel,
-            PedidoCreateEvent pedido,
+            PedidoProcesadoEvent pedido,
             BasicProperties properties,
             CancellationToken cancellationToken)
         {

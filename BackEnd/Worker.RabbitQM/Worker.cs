@@ -14,7 +14,7 @@ public class RabbitMqWorker(
         {
             using var scope = serviceScopeFactory.CreateScope();
 
-            var service = scope.ServiceProvider.GetRequiredService<IRabbitServices>();
+            var service = scope.ServiceProvider.GetRequiredService<IPedidosPublishServices>();
 
             await service.PublicarPedidosAsync(stoppingToken);
             
