@@ -10,7 +10,7 @@ namespace Worker.Pedidos
     public interface IRabbitConfig
     {
         Task InicializarConexionAsync(CancellationToken cancellationToken);
-        Task<(IConnection Connection, IChannel Channel)> CrearConexionAsync(CancellationToken cancellationToken);
+        // Task<(IConnection Connection, IChannel Channel)> CrearConexionAsync(CancellationToken cancellationToken);
         Task DeclararColaPedidosAsync(IChannel channel,CancellationToken cancellationToken);
         Task ConfiguracionDeProcesamientoAsync(IChannel channel, CancellationToken cancellationToken);
         Task ConsumirColaPedidosAsync(AsyncEventingBasicConsumer consumidor, CancellationToken cancellationToken);
@@ -77,33 +77,6 @@ namespace Worker.Pedidos
                 "Conexión establecida con RabbitMQ.");
         }
 
-        public async Task<(IConnection Connection, IChannel Channel)> CrearConexionAsync(CancellationToken cancellationToken)
-        {
-            var factory = CrearConnectionFactory();
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    var connection = await factory.CreateConnectionAsync(cancellationToken);
-
-                    var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
-
-                    _logger.LogInformation("Conexión exitosa con RabbitMQ.");
-
-                    return (connection, channel);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "RabbitMQ no está disponible. Reintentando en 5 segundos...");
-
-                    await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
-                }
-            }
-
-            throw new OperationCanceledException(cancellationToken);
-        }
-
         private ConnectionFactory CrearConnectionFactory()
         {
             return new ConnectionFactory
@@ -167,56 +140,5 @@ namespace Worker.Pedidos
                 cancellationToken: cancellationToken);
         }
 
-        // public async Task InicializarConexionAsync(CancellationToken cancellationToken)
-        // {
-        //     if (_connection is not null &&
-        //         _connection.IsOpen &&
-        //         _channel is not null &&
-        //         _channel.IsOpen)
-        //     {
-        //         return;
-        //     }
-
-        //     var factory = CrearConnectionFactory();
-
-        //     _connection = await factory.CreateConnectionAsync(
-        //         cancellationToken);
-
-        //     _channel = await _connection.CreateChannelAsync(
-        //         cancellationToken: cancellationToken);
-
-        //     await DeclararColaAsync(
-        //         _channel,
-        //         cancellationToken);
-
-        //     _logger.LogInformation(
-        //         "Conexión establecida con RabbitMQ.");
-        // }
-
-
-
-
-        // private async Task PublicarPedidoAsync(
-        //     IChannel channel,
-        //     PedidoCreateEvent pedido,
-        //     BasicProperties properties,
-        //     CancellationToken cancellationToken)
-        // {
-        //     var message = JsonSerializer.Serialize(pedido);
-
-        //     var body = Encoding.UTF8.GetBytes(message);
-
-        //     await channel.BasicPublishAsync(
-        //             exchange: string.Empty,
-        //             routingKey: _configuration["RabbitMQ:QueueName"] ?? "pedidos_queue",
-        //             mandatory: false,
-        //             basicProperties: properties,
-        //             body: body,
-        //             cancellationToken: cancellationToken);
-
-        //         _logger.LogInformation(
-        //             "Pedido publicado en RabbitMQ: {PedidoId}",
-        //             pedido.PedidoId);
-        // }
     }
 }
