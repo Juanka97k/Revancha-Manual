@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Pedidos.Api.Features.WebApi
+namespace Pedidos.Api.Hubs
 {
     public interface IPedidosClient
     {

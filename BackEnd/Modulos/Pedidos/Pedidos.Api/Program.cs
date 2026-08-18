@@ -6,8 +6,10 @@ using Pedidos.Aplicacion.Interfaces;
 using Pedidos.Aplicacion.Services;
 using Pedidos.Aplicacion.Validators;
 using FluentValidation;
-using Pedidos.Api.Features.WebApi;
-using Pedidos.Api.Features.BackGround;
+using Pedidos.Api.BackgroundServices;
+using Pedidos.Infraestructura.configs;
+using Pedidos.Api.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

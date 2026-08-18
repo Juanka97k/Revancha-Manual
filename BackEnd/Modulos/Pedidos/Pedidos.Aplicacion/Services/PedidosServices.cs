@@ -10,9 +10,10 @@ namespace Pedidos.Aplicacion.Services
     public class PedidosServices : IPedidosServices
     {
         private readonly ILogger<PedidosServices> _logger;
-        //private readonly IPedidosMapper _pedidosMapper;
+
 
         private readonly IPedidosRepository _pedidosRepository;
+        
         public PedidosServices(
             ILogger<PedidosServices> logger,
             IPedidosRepository pedidosRepository

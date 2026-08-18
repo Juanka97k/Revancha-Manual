@@ -5,11 +5,14 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Pedidos.Api.Features.WebApi;
+using Microsoft.Extensions.Logging;
+using Pedidos.Api.Hubs;
+using Pedidos.Aplicacion.Interfaces;
+using Pedidos.Infraestructura.configs;
 using RabbitMQ.Client.Events;
 using Shared.Events;
 
-namespace Pedidos.Infraestructura.BackgroundServices
+namespace Pedidos.Api.BackgroundServices
 {
     public class PredidosProcesadosConsumerServices : BackgroundService
     {
