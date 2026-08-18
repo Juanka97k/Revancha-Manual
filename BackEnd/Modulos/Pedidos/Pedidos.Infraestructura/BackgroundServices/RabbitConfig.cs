@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Pedidos.Api.Features.BackGround
+namespace Pedidos.Infraestructura.BackgroundServices
 {
 
 
@@ -15,18 +15,18 @@ namespace Pedidos.Api.Features.BackGround
         Task InicializarConexionAsync(CancellationToken cancellationToken);
         AsyncEventingBasicConsumer DeclararConsumidor();
         Task ConsumirColaPedidosProcesadosAsync(AsyncEventingBasicConsumer consumidor, CancellationToken cancellationToken);
-        Task ExitosoProcesamientoPedidoAsync(BasicDeliverEventArgs ea,CancellationToken cancellationToken);
-        Task FalloProcesamientoPedidoAsync(BasicDeliverEventArgs ea,CancellationToken cancellationToken);
+        Task ExitosoProcesamientoPedidoAsync(BasicDeliverEventArgs ea, CancellationToken cancellationToken);
+        Task FalloProcesamientoPedidoAsync(BasicDeliverEventArgs ea, CancellationToken cancellationToken);
     }
 
-    public class RabbitConfig: IRabbitConfig
+    public class RabbitConfig : IRabbitConfig
     {
 
         private readonly ILogger<RabbitConfig> _logger;
         private readonly IConfiguration _configuration;
 
-        private IConnection?    _connection;
-        private IChannel?       _channelProcesados;
+        private IConnection? _connection;
+        private IChannel? _channelProcesados;
 
         public RabbitConfig(
             ILogger<RabbitConfig> logger,
@@ -51,7 +51,7 @@ namespace Pedidos.Api.Features.BackGround
 
             _connection = await factory.CreateConnectionAsync(
                 cancellationToken);
-            
+
             _channelProcesados = await _connection.CreateChannelAsync(
                 cancellationToken: cancellationToken);
 
@@ -77,7 +77,7 @@ namespace Pedidos.Api.Features.BackGround
             };
         }
 
-        private async Task DeclararColaProcesadosAsync(IChannel channel,CancellationToken cancellationToken)
+        private async Task DeclararColaProcesadosAsync(IChannel channel, CancellationToken cancellationToken)
         {
             await channel.QueueDeclareAsync(
                 queue: _configuration["RabbitMQ:QueueProcesados"] ?? "pedido-processed-queue",
@@ -106,28 +106,28 @@ namespace Pedidos.Api.Features.BackGround
         {
             await _channelProcesados.BasicConsumeAsync(
                 queue: _configuration["RabbitMQ:QueueProcesados"] ?? "pedido-processed-queue",
-                autoAck: false, 
+                autoAck: false,
                 consumer: consumidor,
                 cancellationToken: cancellationToken
                 );
         }
 
-        public async Task ExitosoProcesamientoPedidoAsync(BasicDeliverEventArgs ea,CancellationToken cancellationToken)
+        public async Task ExitosoProcesamientoPedidoAsync(BasicDeliverEventArgs ea, CancellationToken cancellationToken)
         {
             await _channelProcesados.BasicAckAsync(
-                deliveryTag: ea.DeliveryTag, 
-                multiple: false, 
+                deliveryTag: ea.DeliveryTag,
+                multiple: false,
                 cancellationToken: cancellationToken);
         }
 
-        public async Task FalloProcesamientoPedidoAsync(BasicDeliverEventArgs ea,CancellationToken cancellationToken)
+        public async Task FalloProcesamientoPedidoAsync(BasicDeliverEventArgs ea, CancellationToken cancellationToken)
         {
             await _channelProcesados.BasicNackAsync(
-                deliveryTag: ea.DeliveryTag, 
-                multiple: false, 
-                requeue: true, 
+                deliveryTag: ea.DeliveryTag,
+                multiple: false,
+                requeue: true,
                 cancellationToken: cancellationToken);
         }
-        
+
     }
 }

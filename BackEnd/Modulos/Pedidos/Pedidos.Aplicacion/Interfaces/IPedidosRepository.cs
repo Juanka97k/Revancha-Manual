@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Pedidos.Dominio.Entidades;
-using Pedidos.Infraestructura.Entities;
 
 namespace Pedidos.Aplicacion.Interfaces
 {

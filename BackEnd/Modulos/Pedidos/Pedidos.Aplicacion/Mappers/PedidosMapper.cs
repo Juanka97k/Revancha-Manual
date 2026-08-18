@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Pedidos.Aplicacion.Dtos;
 using Pedidos.Dominio.Entidades;
+using Shared.Events;
 
 
 namespace Pedidos.Aplicacion.Mappers
@@ -20,7 +21,7 @@ namespace Pedidos.Aplicacion.Mappers
                 NombreCliente = request.ClienteNombre.ToLower(),
                 Sku = request.Sku.ToUpper(),
                 Cantidad = request.Cantidad,
-                Estado = Status.Pendiente,
+                Estado = EstadoPedido.Pendiente,
                 FechaCreacion = DateTime.UtcNow
             };
         }

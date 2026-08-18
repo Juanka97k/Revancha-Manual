@@ -1,7 +1,9 @@
 using System;
+using Microsoft.Extensions.Logging;
 using Pedidos.Aplicacion.Dtos;
 using Pedidos.Aplicacion.Interfaces;
 using Pedidos.Aplicacion.Mappers;
+using Pedidos.Dominio.Entidades;
 
 namespace Pedidos.Aplicacion.Services
 {
@@ -10,19 +12,13 @@ namespace Pedidos.Aplicacion.Services
         private readonly ILogger<PedidosServices> _logger;
         //private readonly IPedidosMapper _pedidosMapper;
 
-        private readonly ISkuServices _skuServices;
-
         private readonly IPedidosRepository _pedidosRepository;
         public PedidosServices(
             ILogger<PedidosServices> logger,
-            //IPedidosMapper pedidosMapper, 
-            ISkuServices skuServices,
             IPedidosRepository pedidosRepository
             )
         {
             _logger = logger;
-            //_pedidosMapper = pedidosMapper;
-            _skuServices = skuServices;
             _pedidosRepository = pedidosRepository;
         }
 
@@ -31,13 +27,6 @@ namespace Pedidos.Aplicacion.Services
         {
             try
             {
-
-                var skuExiste = await _skuServices.VerificarExistenciaSkuAsync(request.Sku, cancellationToken);
-                if (!skuExiste)
-                {
-                    throw new Exception($"El SKU '{request.Sku}' no existe en la base de datos.");
-                }
-
                 var pedido = PedidosMapper.PedidoMapper(request);
 
                 _pedidosRepository.CrearPedido(pedido);

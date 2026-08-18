@@ -1,13 +1,11 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Pedidos.Infraestructura.Context;
-using Pedidos.Api.Features.Pedidos.interfaces;
-using Pedidos.Api.Features.Pedidos.Mappers;
-using Pedidos.Api.Features.Pedidos.Repo;
-using Pedidos.Api.Features.Pedidos.Services;
+using Pedidos.Infraestructura.Repos;
+using Pedidos.Aplicacion.Interfaces;
+using Pedidos.Aplicacion.Services;
+using Pedidos.Aplicacion.Validators;
 using FluentValidation;
-using Pedidos.Api.Features.Pedidos;
-using Pedidos.Api.Features.Sku;
 using Pedidos.Api.Features.WebApi;
 using Pedidos.Api.Features.BackGround;
 
@@ -32,7 +30,6 @@ builder.Services.AddDbContext<PedidosDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 PedidosConfigureServices(builder.Services);
-SkuConfigureServices(builder.Services);
 
 builder.Services.AddSingleton<IRabbitConfig, RabbitConfig>();
 
@@ -79,11 +76,4 @@ static void PedidosConfigureServices(
     //services.AddScoped<IPedidosMapper, PedidosMapper>();
     services.AddScoped<IPedidosRepository, PedidosRepository>();
     services.AddValidatorsFromAssemblyContaining<PedidosCreateDtoValidator>();
-}
-
-static void SkuConfigureServices(
-    IServiceCollection services)
-{
-    services.AddScoped<ISkuRepository, SkuRepository>();
-    services.AddScoped<ISkuServices, SkuServices>();
 }

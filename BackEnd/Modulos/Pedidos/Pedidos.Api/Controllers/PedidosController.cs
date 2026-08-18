@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Pedidos.Api.Dtos;
+using Pedidos.Aplicacion.Dtos;
+using Pedidos.Aplicacion.Interfaces;
 
-namespace Pedidos.Api.Features.Pedidos
+namespace Pedidos.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

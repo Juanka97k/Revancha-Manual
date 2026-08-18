@@ -9,7 +9,7 @@ using Pedidos.Api.Features.WebApi;
 using RabbitMQ.Client.Events;
 using Shared.Events;
 
-namespace Pedidos.Api.Features.BackGround
+namespace Pedidos.Infraestructura.BackgroundServices
 {
     public class PredidosProcesadosConsumerServices : BackgroundService
     {
@@ -25,9 +25,9 @@ namespace Pedidos.Api.Features.BackGround
             IHubContext<PedidosHub, IPedidosClient> hubContext
             )
         {
-            _rabbitConfig   = rabbitConfig;
-            _logger         = logger;
-            _hubContext     = hubContext;
+            _rabbitConfig = rabbitConfig;
+            _logger = logger;
+            _hubContext = hubContext;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,7 +36,7 @@ namespace Pedidos.Api.Features.BackGround
 
             if (stoppingToken.IsCancellationRequested) return;
 
-            var consumidor =  _rabbitConfig.DeclararConsumidor();
+            var consumidor = _rabbitConfig.DeclararConsumidor();
 
             consumidor.ReceivedAsync += async (model, ea) =>
             {
@@ -45,7 +45,7 @@ namespace Pedidos.Api.Features.BackGround
                     stoppingToken);
             };
 
-            await _rabbitConfig.ConsumirColaPedidosProcesadosAsync(consumidor,stoppingToken);
+            await _rabbitConfig.ConsumirColaPedidosProcesadosAsync(consumidor, stoppingToken);
 
             _logger.LogInformation("Backgrond escuchando la cola RabbitMQ.");
 
@@ -55,7 +55,7 @@ namespace Pedidos.Api.Features.BackGround
             }
         }
 
-        private async Task ProcesarMensajeAsync(BasicDeliverEventArgs ea,CancellationToken cancellationToken)
+        private async Task ProcesarMensajeAsync(BasicDeliverEventArgs ea, CancellationToken cancellationToken)
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
@@ -79,10 +79,10 @@ namespace Pedidos.Api.Features.BackGround
                         mensaje: $"El pedido {evento.PedidoId} fue procesado con estado: {evento.Estado}"
                     );
                     _logger.LogInformation("⚡ Evento SignalR transmitido a todos los clientes.");
-                    
+
                 }
                 // Confirmación exitosa 
-                await _rabbitConfig.ExitosoProcesamientoPedidoAsync(ea,cancellationToken);
+                await _rabbitConfig.ExitosoProcesamientoPedidoAsync(ea, cancellationToken);
                 //await _rabbitConfig.FalloProcesamientoPedidoAsync(ea,cancellationToken);
 
                 //await Task.Delay(10000, cancellationToken);
@@ -90,7 +90,7 @@ namespace Pedidos.Api.Features.BackGround
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error procesando el mensaje de RabbitMQ. Se enviará Nack para reintento.");
-                await _rabbitConfig.FalloProcesamientoPedidoAsync(ea,cancellationToken);
+                await _rabbitConfig.FalloProcesamientoPedidoAsync(ea, cancellationToken);
             }
         }
     }
