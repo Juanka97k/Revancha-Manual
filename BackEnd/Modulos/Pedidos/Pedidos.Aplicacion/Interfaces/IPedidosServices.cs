@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Pedidos.Api.Dtos;
+using Pedidos.Aplicacion.Dtos;
 
-namespace Pedidos.Api.Features.Pedidos.interfaces
+namespace Pedidos.Aplicacion.Interfaces
 {
     public interface IPedidosServices
     {

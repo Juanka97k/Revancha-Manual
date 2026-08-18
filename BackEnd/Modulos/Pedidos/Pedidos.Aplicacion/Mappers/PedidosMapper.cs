@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Pedidos.Api.Dtos;
-using Pedidos.Api.Features.Pedidos.interfaces;
-using Pedidos.Infraestructura.Entities;
-using Shared.Events;
+using Pedidos.Aplicacion.Dtos;
+using Pedidos.Dominio.Entidades;
 
-namespace Pedidos.Api.Features.Pedidos.Mappers
+
+namespace Pedidos.Aplicacion.Mappers
 {
 
     public static class PedidosMapper
@@ -26,7 +25,7 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
             };
         }
 
-        public static PedidoCreateEvent PedidoCreateEventMapper(PedidosCreateDto request,Guid pedidoId)
+        public static PedidoCreateEvent PedidoCreateEventMapper(PedidosCreateDto request, Guid pedidoId)
         {
             return new PedidoCreateEvent(
                 Guid.NewGuid(),
@@ -49,7 +48,7 @@ namespace Pedidos.Api.Features.Pedidos.Mappers
                 Payload = eventoSerialize,
                 CreadoEn = DateTime.UtcNow,
                 Estado = EstadoOutbox.SinProcesar
-                
+
             };
         }
 

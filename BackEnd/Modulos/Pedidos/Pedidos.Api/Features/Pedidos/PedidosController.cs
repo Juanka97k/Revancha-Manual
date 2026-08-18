@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pedidos.Api.Dtos;
-using Pedidos.Api.Features.Pedidos.interfaces;
 
 namespace Pedidos.Api.Features.Pedidos
 {
@@ -37,7 +36,7 @@ namespace Pedidos.Api.Features.Pedidos
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public IActionResult ConsultarPedido(int id)
         {
             return Ok($"Soy el get con id {id}");
@@ -45,8 +44,8 @@ namespace Pedidos.Api.Features.Pedidos
 
         [HttpPost]
         [ProducesResponseType(typeof(PedidosResponseDto), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CrearPedidos(PedidosCreateDto request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
