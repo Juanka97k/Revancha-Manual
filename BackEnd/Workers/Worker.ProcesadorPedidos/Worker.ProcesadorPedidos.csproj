@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-Worker.RabbitQM-b0ecaa59-fa89-48af-bc62-d0201a386773</UserSecretsId>
+    <UserSecretsId>dotnet-Worker.Pedidos-2a8c25d4-d3be-42a1-9096-91f339517ded</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
-    <ProjectReference Include="..\Modulos\Pedidos\Pedidos.Infraestructura\Pedidos.Infraestructura.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\Modulos\Pedidos\Pedidos.Infraestructura\Pedidos.Infraestructura.csproj" />
   </ItemGroup>
 </Project>
