@@ -1,6 +1,8 @@
 <Solution>
-  <Project Path="BackEnd/Pedidos.Api/Pedidos.Api.csproj" />
-  <Project Path="BackEnd/Pedidos.Infraestructura/Pedidos.Infraestructura.csproj" />
+  <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Dominio/Pedidos.Dominio.csproj" />
+  <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Aplicacion/Pedidos.Aplicacion.csproj" />
+  <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Infraestructura/Pedidos.Infraestructura.csproj" />
+  <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Api/Pedidos.Api.csproj" />
   <Project Path="BackEnd/Worker.Pedidos/Worker.Pedidos.csproj" />
   <Project Path="BackEnd/Worker.RabbitQM/Worker.RabbitQM.csproj" />
   <Project Path="BackEnd/Shared/Shared.csproj" />
