@@ -5,10 +5,10 @@
     <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Infraestructura/Pedidos.Infraestructura.csproj" />
     <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Api/Pedidos.Api.csproj" />
   </Folder>
-    <Folder Name="/BackEnd/Modulos/Inventario/">
-    <Project Path="BackEnd/Modulos/Inventario/Inventario.Aplicacion/Inventario.Aplicacion.csproj" />
-    <Project Path="BackEnd/Modulos/Inventario/Inventario.Dominio/Inventario.Dominio.csproj" />
-    <Project Path="BackEnd/Modulos/Inventario/Inventario.Infraestructura/Inventario.Infraestructura.csproj" />
+    <Folder Name="/BackEnd/Modulos/Inventarios/">
+    <Project Path="BackEnd/Modulos/Inventarios/Inventario.Aplicacion/Inventario.Aplicacion.csproj" />
+    <Project Path="BackEnd/Modulos/Inventarios/Inventario.Dominio/Inventario.Dominio.csproj" />
+    <Project Path="BackEnd/Modulos/Inventarios/Inventario.Infraestructura/Inventario.Infraestructura.csproj" />
   </Folder>
 
   <Project Path="BackEnd/Pedidos.Infraestructura2/Pedidos.Infraestructura2.csproj" />
