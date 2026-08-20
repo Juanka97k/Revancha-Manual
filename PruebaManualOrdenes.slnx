@@ -1,18 +1,22 @@
 <Solution>
-  <Folder Name="/BackEnd/Modulos/Pedidos/" />
+  <Folder Name="/BackEnd/" />
+  <Folder Name="/BackEnd/Modulos/" />
+  <Folder Name="/BackEnd/Modulos/Inventario/">
+    <Project Path="BackEnd/Modulos/Inventario/Inventario.Aplicacion/Inventario.Aplicacion.csproj" />
+    <Project Path="BackEnd/Modulos/Inventario/Inventario.Dominio/Inventario.Dominio.csproj" />
+    <Project Path="BackEnd/Modulos/Inventario/Inventario.Infraestructura/Inventario.Infraestructura.csproj" />
+  </Folder>
+  <Folder Name="/Modulos/" />
+  <Folder Name="/Modulos/Pedidos/">
     <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Dominio/Pedidos.Dominio.csproj" />
     <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Aplicacion/Pedidos.Aplicacion.csproj" />
     <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Infraestructura/Pedidos.Infraestructura.csproj" />
     <Project Path="BackEnd/Modulos/Pedidos/Pedidos.Api/Pedidos.Api.csproj" />
   </Folder>
-    <Folder Name="/BackEnd/Modulos/Inventarios/">
-    <Project Path="BackEnd/Modulos/Inventarios/Inventario.Aplicacion/Inventario.Aplicacion.csproj" />
-    <Project Path="BackEnd/Modulos/Inventarios/Inventario.Dominio/Inventario.Dominio.csproj" />
-    <Project Path="BackEnd/Modulos/Inventarios/Inventario.Infraestructura/Inventario.Infraestructura.csproj" />
+  <Folder Name="/Workers/">
+    <Project Path="BackEnd/Workers/Worker.OutboxPublisher/Worker.OutboxPublisher.csproj" />
+    <Project Path="BackEnd/Workers/Worker.ProcesadorPedidos/Worker.ProcesadorPedidos.csproj" />
   </Folder>
-
   <Project Path="BackEnd/Pedidos.Infraestructura2/Pedidos.Infraestructura2.csproj" />
-  <Project Path="BackEnd/Workers/Worker.OutboxPublisher/Worker.OutboxPublisher.csproj" />
-  <Project Path="BackEnd/Workers/Worker.ProcesadorPedidos/Worker.ProcesadorPedidos.csproj" />
   <Project Path="BackEnd/Shared/Shared.csproj" />
 </Solution>
