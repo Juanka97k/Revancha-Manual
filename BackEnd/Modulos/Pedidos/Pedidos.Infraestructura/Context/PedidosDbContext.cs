@@ -16,6 +16,8 @@ namespace Pedidos.Infraestructura.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.HasDefaultSchema("pedidos");
+
             modelBuilder.Entity<MensajesOutbox>(entity =>
             {
                 entity.HasKey(e => e.Id);

@@ -6,13 +6,21 @@ namespace Inventario.Infraestructura.Context
 {
     public class InventarioDbContext : DbContext
     {
+        public InventarioDbContext(DbContextOptions<InventarioDbContext> options) : base(options)
+        {
+        }
 
         public DbSet<Stock> Stocks => Set<Stock>();
         public DbSet<MensajesOutbox> MensajesOutbox => Set<MensajesOutbox>();
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.HasDefaultSchema("inventario");
 
             modelBuilder.Entity<MensajesOutbox>(entity =>
             {
@@ -24,7 +32,20 @@ namespace Inventario.Infraestructura.Context
                 entity.Property(e => e.CreadoEn).IsRequired();
                 entity.Property(e => e.Estado).IsRequired();
             });
-            
+
+            modelBuilder.Entity<Stock>(entity =>
+            {
+                entity.HasKey(e => e.Sku);
+                entity.Property(e => e.Cantidad).IsRequired();
+
+                entity.HasData(
+                new Stock { Sku = "SKU001", Cantidad = 100 },
+                new Stock { Sku = "SKU002", Cantidad = 50 },
+                new Stock { Sku = "SKU003", Cantidad = 75 }
+                );
+
+            });
+
         }
     }
 }

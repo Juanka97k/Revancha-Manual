@@ -6,13 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Pedidos.Infraestructura.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialPedidosMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "pedidos");
+
             migrationBuilder.CreateTable(
                 name: "MensajesOutbox",
+                schema: "pedidos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -29,6 +33,7 @@ namespace Pedidos.Infraestructura.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Pedidos",
+                schema: "pedidos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -48,10 +53,12 @@ namespace Pedidos.Infraestructura.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MensajesOutbox");
+                name: "MensajesOutbox",
+                schema: "pedidos");
 
             migrationBuilder.DropTable(
-                name: "Pedidos");
+                name: "Pedidos",
+                schema: "pedidos");
         }
     }
 }

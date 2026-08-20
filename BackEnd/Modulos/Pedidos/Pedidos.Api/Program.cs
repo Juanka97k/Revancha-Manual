@@ -9,6 +9,8 @@ using FluentValidation;
 using Pedidos.Api.BackgroundServices;
 using Pedidos.Infraestructura.configs;
 using Pedidos.Api.Hubs;
+using Inventario.Infraestructura.Configs;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +45,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
+//dependencias de inventory
+builder.Services.AddInventarioModule(builder.Configuration);
 
 var app = builder.Build();
 

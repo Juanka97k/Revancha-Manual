@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
     <ProjectReference Include="..\Pedidos.Aplicacion\Pedidos.Aplicacion.csproj" />
     <ProjectReference Include="..\Pedidos.Infraestructura\Pedidos.Infraestructura.csproj" />
+    <ProjectReference Include="..\..\Inventario\Inventario.Infraestructura\Inventario.Infraestructura.csproj" />
   </ItemGroup>
 
 </Project>
